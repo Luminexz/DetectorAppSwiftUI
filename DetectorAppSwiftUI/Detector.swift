@@ -41,12 +41,21 @@ extension ViewController {
     }
     
     func setupLayers() {
+        let screenRect = view.bounds
+        
         detectionLayer = CALayer()
         detectionLayer.frame = CGRect(x: 0, y: 0, width: screenRect.size.width, height: screenRect.size.height)
-        DispatchQueue.main.async { [weak self] in 
-            self!.view.layer.addSublayer(self!.detectionLayer)
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            guard let viewLayer = self.view?.layer else {
+                print("Error: view.layer is nil")
+                return
+            }
+            viewLayer.addSublayer(self.detectionLayer)
         }
     }
+
     
     func updateLayers() {
         detectionLayer?.frame = CGRect(x: 0, y: 0, width: screenRect.size.width, height: screenRect.size.height)
